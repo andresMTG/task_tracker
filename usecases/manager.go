@@ -8,17 +8,18 @@ import (
 
 // CommandManager is the main function that orchestrate the system
 func CommandManager(command string, fileName string) {
-	listTask := FileToListTask(fileName)
+	taskList := FileToListTask(fileName)
 	switch command {
 	case "add":
 		description := os.Args[2]
-		CreateTask(description, listTask, fileName)
+		CreateTask(description, taskList, fileName)
 	case "update":
 		id, _ := strconv.Atoi(os.Args[2])
 		description := os.Args[3]
-		UpdateDescription(listTask, id, description, fileName)
+		UpdateDescription(taskList, id, description, fileName)
 	case "delete":
-		fmt.Println("task deleted successfully")
+		id, _ := strconv.Atoi(os.Args[2])
+		DeleteTask(taskList , id , fileName )
 	case "mark-in-progress":
 		fmt.Println("mark-in-progress")
 	case "mark-in-done":
