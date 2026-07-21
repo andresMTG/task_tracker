@@ -21,9 +21,11 @@ func CommandManager(command string, fileName string) {
 		id, _ := strconv.Atoi(os.Args[2])
 		DeleteTask(taskList , id , fileName )
 	case "mark-in-progress":
-		fmt.Println("mark-in-progress")
+		id, _ := strconv.Atoi(os.Args[2])
+		UpdateStatus(taskList , id , command, fileName )
 	case "mark-in-done":
-		fmt.Println("mark-in-done")
+		id, _ := strconv.Atoi(os.Args[2])
+		UpdateStatus(taskList , id , command, fileName )
 	case "list":
 		fmt.Println("list")
 	case "help":

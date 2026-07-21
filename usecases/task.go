@@ -78,3 +78,26 @@ func DeleteTask(taskList []*repository.Task, id int, fileName string) {
 
 	fmt.Printf("Task %v succesfully deleted from your list", id)
 }
+
+
+// UpdateStatus change the status of the expecific task
+func UpdateStatus(taskList []*repository.Task, id int, status, fileName string) {
+	updatedTask, _, err := getTaskById(id, taskList)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	newStatus := repository.DONE
+
+	if status == "mark-in-progress" {
+		newStatus = repository.IN_PROGRESS
+	}
+
+	updatedTask.Status = newStatus
+	updatedTask.UpdatedAt = time.Now()
+
+	WriteFile(fileName, taskList)
+
+	fmt.Printf("Task %v current status is: %v", id, newStatus)
+}
