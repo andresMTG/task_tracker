@@ -27,7 +27,11 @@ func CommandManager(command string, fileName string) {
 		id, _ := strconv.Atoi(os.Args[2])
 		UpdateStatus(taskList , id , command, fileName )
 	case "list":
-		fmt.Println("list")
+		filter := ""
+		if len(os.Args) > 2 {
+			filter = os.Args[2]
+		}
+		ShowTasks(taskList, filter)
 	case "help":
 		fmt.Println("you need to choose what to do")
 	}
