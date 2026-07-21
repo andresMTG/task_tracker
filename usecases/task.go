@@ -1,16 +1,14 @@
 package usecases
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/andresMTG/task_tracker/repository"
 )
 
-
-func CreateTask(description string, taskList []repository.Task, fileName string) {
+// CreateTask creates a new task and add to our jsonFile
+func CreateTask(description string, taskList []*repository.Task, fileName string) {
 
 	newTask := repository.Task{
 		Id:          autoIncrementId(taskList),
@@ -20,23 +18,15 @@ func CreateTask(description string, taskList []repository.Task, fileName string)
 		UpdatedAt:   time.Now(),
 	}
 
-	taskList = append(taskList, newTask)
+	taskList = append(taskList, &newTask)
 
-	jsonToSave, err2 := json.Marshal(taskList)
-	if err2 != nil {
-		fmt.Println(err2)
-	}
-
-	err3 := os.WriteFile(fileName, jsonToSave, 7777)
-	if err3 != nil {
-		fmt.Println(err3)
-	}
+	WriteFile(fileName, taskList)
 
 	fmt.Printf("Task %v succesfully added to your list", newTask.Id)
 }
 
-
-func autoIncrementId(taskList []repository.Task) int {
+// autoIncrementId is workaround to have auto incremented id in a non database env
+func autoIncrementId(taskList []*repository.Task) int {
 	lastId := 0
 	for _, task := range taskList {
 		if task.Id > lastId {
@@ -44,4 +34,30 @@ func autoIncrementId(taskList []repository.Task) int {
 		}
 	}
 	return lastId + 1
+}
+
+// UpdateDescription change the description to a new one
+func UpdateDescription(taskList []*repository.Task, id int, newDescription,fileName string){
+	updatedTask, err := getTaskById(id,taskList)
+	if err != nil {
+		fmt.Println(err)
+		return 
+	}
+
+	updatedTask.Description = newDescription
+	updatedTask.UpdatedAt = time.Now()
+
+	WriteFile(fileName, taskList)
+
+	fmt.Printf("Task %v succesfully updated to your list", id)
+}
+
+// getTaskById is an auxiliar function to get expecified task
+func getTaskById(id int, taskList []*repository.Task) (*repository.Task, error) {
+	for _, task := range taskList {
+		if task.Id == id {
+			return task,nil;
+		}
+	}
+	return &repository.Task{}, fmt.Errorf("Id dont exists error: ID - %v, dont exists", id)
 }
