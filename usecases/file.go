@@ -22,13 +22,12 @@ func FileExists(fileName string) bool {
 }
 
 // CreateFile creates a file if notExists, if exists they truncate
-func CreateFile(fileName string) (*os.File) {
+func CreateFile(fileName string) *os.File {
 	file, err := os.Create(fileName)
 	if err != nil {
 		log.Println(err)
-		return file
+		return nil
 	}
-	defer file.Close()
 	return file
 }
 
@@ -40,7 +39,7 @@ func WriteFile(fileName string, taskList []*repository.Task) {
 		log.Println(marshalError)
 	}
 
-	writeError := os.WriteFile(fileName, jsonToSave, 7777)
+	writeError := os.WriteFile(fileName, jsonToSave, 0644)
 	if writeError != nil {
 		log.Println(writeError)
 	}

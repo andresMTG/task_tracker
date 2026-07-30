@@ -1,23 +1,45 @@
 # task_tracker
-A simple task manager using cli-interface
 
+Um gerenciador simples de tarefas via linha de comando.
 
-# Adding a new task
-task-cli add "Buy groceries"
-# Output: Task added successfully (ID: 1)
+## Requisitos
+- Go 1.24+ instalado
 
-# Updating and deleting tasks
-task-cli update 1 "Buy groceries and cook dinner"
-task-cli delete 1
+## Como executar
+No diretório do projeto, você pode rodar o app diretamente com:
 
-# Marking a task as in progress or done
-task-cli mark-in-progress 1
-task-cli mark-in-done 1
+```bash
+go run ./cmd add "Comprar pão"
+```
 
-# Listing all tasks
-task-cli list
+Ou criar um binário e executá-lo:
 
-# Listing tasks by status
-task-cli list done
-task-cli list todo
-task-cli list in-progress
+```bash
+go build -o task-tracker.exe ./cmd
+./task-tracker.exe add "Comprar pão"
+```
+
+> No Windows, o comando acima pode ser executado com `./task-tracker.exe` em PowerShell.
+
+## Comandos disponíveis
+
+- `add <descrição>`: cria uma nova tarefa
+- `update <id> <nova descrição>`: atualiza a descrição de uma tarefa
+- `delete <id>`: remove uma tarefa
+- `mark-in-progress <id>`: marca uma tarefa como em andamento
+- `mark-in-done <id>`: marca uma tarefa como concluída
+- `list`: lista todas as tarefas
+- `list <todo|in-progress|done>`: lista tarefas filtradas por status
+- `help`: mostra a ajuda do aplicativo
+
+## Exemplo de uso
+
+```bash
+go run ./cmd add "Estudar Go"
+go run ./cmd list
+go run ./cmd mark-in-progress 1
+go run ./cmd mark-in-done 1
+```
+
+## Armazenamento
+As tarefas são salvas em um arquivo chamado `listTask.json` na raiz do projeto. Se ele não existir, o aplicativo cria automaticamente.
